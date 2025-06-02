@@ -5,8 +5,8 @@
 (def ^:private allowed-operations [+ - * /])
 
 (defn- valid-operation?
-  [oper]
-  (contains? allowed-operations oper))
+  [operation]
+  (some #(= operation %) allowed-operations))
 
 (defn- execute-operation-in-stack
   [oper stack]
@@ -16,7 +16,7 @@
       (oper operand1 operand2))
     nil))
 
-(defn- execute-operation-in-stack
+(defn- operate-in-stack
   [operation stack]
   (let [result (execute-operation-in-stack operation stack)
         opers-number 2
@@ -27,7 +27,7 @@
   [token stack]
   (if (number? token)
     (cons token stack)
-    (execute-operation-in-stack token stack)))
+    (operate-in-stack token stack)))
 
 (defn evaluate-rpn
   [inputs]
@@ -38,5 +38,4 @@
       (let [token (first opers)
             rest-opers (next opers)
             result (handle-operation token stack)]
-        (recur result rest-opers)))))
-
+        (recur rest-opers result)))))
