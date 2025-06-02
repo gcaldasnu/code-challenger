@@ -1,4 +1,6 @@
 (ns challenger-clojure.core)
+;; Access the link to understand what motivated the code below.
+;; Challenge: https://github.com/nubank/tech-learning-clojure-service-stack-enabler/tree/main/00003-getting-comfortable-with-clojure/pt#descri%C3%A7%C3%A3o-do-desafio
 
 (def ^:private allowed-operations [+ - * /])
 
