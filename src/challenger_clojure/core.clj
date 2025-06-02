@@ -1,12 +1,12 @@
 (ns challenger-clojure.core)
-;; Access the link to understand what motivated the code below.
+;; Access the link above to understand what motivated the code below.
 ;; Challenge: https://github.com/nubank/tech-learning-clojure-service-stack-enabler/tree/main/00003-getting-comfortable-with-clojure/pt#descri%C3%A7%C3%A3o-do-desafio
 
 (def ^:private allowed-operations [+ - * /])
 
 (defn- valid-operation?
-  [operation]
-  (contains? allowed-operations operation))
+  [oper]
+  (contains? allowed-operations oper))
 
 (defn- execute-operation-in-stack
   [oper stack]
@@ -16,18 +16,18 @@
       (oper operand1 operand2))
     nil))
 
-(defn- operate-in-stack
+(defn- execute-operation-in-stack
   [operation stack]
   (let [result (execute-operation-in-stack operation stack)
-        number-opers 2
-        partial-stack (nthnext stack number-opers)]
+        opers-number 2
+        partial-stack (nthnext stack opers-number)]
     (cons result partial-stack)))
 
 (defn- handle-operation
   [token stack]
   (if (number? token)
     (cons token stack)
-    (operate-in-stack token stack)))
+    (execute-operation-in-stack token stack)))
 
 (defn evaluate-rpn
   [inputs]
