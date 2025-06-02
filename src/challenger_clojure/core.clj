@@ -39,3 +39,15 @@
             rest-opers (next opers)
             result (handle-operation token stack)]
         (recur rest-opers result)))))
+
+(defn filter-and-sum
+  [values]
+  (loop [list-values values
+         sum 0]
+    (if (empty? list-values)
+      sum
+      (let [value (first list-values)
+            rest-list (next list-values)]
+        (if (even? value)
+          (recur rest-list (+ sum value))
+          (recur rest-list sum))))))
