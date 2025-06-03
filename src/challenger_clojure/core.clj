@@ -1,4 +1,5 @@
-(ns challenger-clojure.core)
+(ns challenger-clojure.core
+  (:require [clojure.string :as str]))
 ;; Access the link above to understand what motivated the code below.
 ;; Challenge: https://github.com/nubank/tech-learning-clojure-service-stack-enabler/tree/main/00003-getting-comfortable-with-clojure/pt#descri%C3%A7%C3%A3o-do-desafio
 
@@ -51,3 +52,9 @@
         (if (even? value)
           (recur rest-list (+ sum value))
           (recur rest-list sum))))))
+
+(defn word-count
+  [frase]
+  (-> frase
+      (str/split #" ")
+      frequencies))

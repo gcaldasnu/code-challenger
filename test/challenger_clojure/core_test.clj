@@ -17,3 +17,8 @@
       [1 2 3 4 5 6 7 8 9 10] 30
       [1 3 4 6 7 3 3] 10)))
 
+(deftest word-count-test
+  (testing "Validate word count"
+    (are [word expect] (= (word-count word) expect)
+      "hello world hello" {"hello" 2 "world" 1}
+      "Clojure is fun and Clojure is powerful" {"Clojure" 2, "is" 2, "fun" 1, "and" 1, "powerful" 1})))
