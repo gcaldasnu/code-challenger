@@ -5,9 +5,13 @@
 
 (def ^:private allowed-operations [+ - * /])
 
+(defn- in?
+  [x coll]
+  (some #(= x %) coll))
+
 (defn- valid-operation?
   [operation]
-  (some #(= operation %) allowed-operations))
+  (in? operation allowed-operations))
 
 (defn- execute-operation-in-stack
   [oper stack]
@@ -32,8 +36,8 @@
 
 (defn evaluate-rpn
   "Receive an list and calculate value using Reverse Polish Notation(RPN)"
-  [inputs]
-  (loop [opers inputs
+  [coll]
+  (loop [opers coll
          stack []]
     (if (empty? opers)
       (first stack)
@@ -44,48 +48,58 @@
 
 (defn filter-and-sum
   "Receive an list and return the sum of all even values"
-  [values]
-  (loop [list-values values
+  [coll]
+  (loop [values coll
          sum 0]
-    (if (empty? list-values)
+    (if (empty? values)
       sum
-      (let [value (first list-values)
-            rest-list (next list-values)]
-        (if (even? value)
-          (recur rest-list (+ sum value))
-          (recur rest-list sum))))))
+      (let [value (first values)
+            rest-list (next values)]
+        (->> (if (even? value)
+               (+ sum value)
+               sum)
+             (recur rest-list))))))
 
 (defn word-count
   "Receive an frase and return one map that containing the number of repeated words"
-  [frase]
-  (-> frase
+  [phrase]
+  (-> phrase
       (str/split #" ")
       frequencies))
 
+(defn- biggest
+  [x y]
+  (if (> x y) x y))
+
+(defn- get-max
+  [coll maxx]
+  (-> coll
+      first
+      (biggest maxx)))
+
 (defn find-max
   "Receive an list of number and return the largest one"
-  [values]
-  (loop [vs values
-         mx (first vs)]
-    (if (empty? vs)
-      mx
-      (let [vl (first vs)
-            next-vs (next vs)]
-        (if (> vl mx)
-          (recur next-vs vl)
-          (recur next-vs mx))))))
+  [coll]
+  (loop [values coll
+         maxx (first values)]
+    (if (empty? values)
+      maxx
+      (->> maxx
+           (get-max values)
+           (recur (next values))))))
 
-(defn- str-in?
-  [x coll]
-  (some #(= x %) coll))
+(defn- handle-value-in-seq
+  [coll x]
+  (if (in? x coll)
+    coll
+    (conj coll x)))
 
 (defn compress-seq
-  ([values] (compress-seq values []))
-  ([values lst]
-   (if (empty? values)
+  ([coll] (compress-seq coll []))
+  ([coll lst]
+   (if (empty? coll)
      lst
-     (let [current-value  (first values)
-           next-values (next values)]
-       (if (str-in? current-value lst)
-         (recur next-values lst)
-         (recur next-values (conj lst current-value)))))))
+     (->> coll
+          first
+          (handle-value-in-seq lst)
+          (recur (next coll))))))
