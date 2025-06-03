@@ -31,6 +31,7 @@
     (operate-in-stack token stack)))
 
 (defn evaluate-rpn
+  "Receive an list and calculate value using Reverse Polish Notation(RPN)"
   [inputs]
   (loop [opers inputs
          stack []]
@@ -42,6 +43,7 @@
         (recur rest-opers result)))))
 
 (defn filter-and-sum
+  "Receive an list and return the sum of all even values"
   [values]
   (loop [list-values values
          sum 0]
@@ -54,12 +56,14 @@
           (recur rest-list sum))))))
 
 (defn word-count
+  "Receive an frase and return one map that containing the number of repeated words"
   [frase]
   (-> frase
       (str/split #" ")
       frequencies))
 
 (defn find-max
+  "Receive an list of number and return the largest one"
   [values]
   (loop [vs values
          mx (first vs)]
