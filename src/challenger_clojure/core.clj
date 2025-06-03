@@ -31,8 +31,8 @@
     (operate-in-stack token stack)))
 
 (defn evaluate-rpn
-  [inputs]
-  (loop [opers inputs
+  [coll]
+  (loop [opers coll
          stack []]
     (if (empty? opers)
       (first stack)
@@ -42,31 +42,40 @@
         (recur rest-opers result)))))
 
 (defn filter-and-sum
-  [values]
-  (loop [list-values values
+  [coll]
+  (loop [values coll
          sum 0]
-    (if (empty? list-values)
+    (if (empty? values)
       sum
-      (let [value (first list-values)
-            rest-list (next list-values)]
-        (if (even? value)
-          (recur rest-list (+ sum value))
-          (recur rest-list sum))))))
+      (let [value (first values)
+            rest-list (next values)]
+        (->> (if (even? value)
+               (+ sum value)
+               sum)
+             (recur rest-list))))))
 
 (defn word-count
-  [frase]
-  (-> frase
+  [phrase]
+  (-> phrase
       (str/split #" ")
       frequencies))
 
+(defn- biggest
+  [x y]
+  (if (> x y) x y))
+
+(defn- get-max
+  [coll maxx]
+  (-> coll
+      first
+      (biggest maxx)))
+
 (defn find-max
-  [values]
-  (loop [vs values
-         mx (first vs)]
-    (if (empty? vs)
-      mx
-      (let [vl (first vs)
-            next-vs (next vs)]
-        (if (> vl mx)
-          (recur next-vs vl)
-          (recur next-vs mx))))))
+  [coll]
+  (loop [values coll
+         maxx (first values)]
+    (if (empty? values)
+      maxx
+      (->> maxx
+           (get-max values)
+           (recur (next values))))))
