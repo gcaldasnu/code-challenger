@@ -31,6 +31,7 @@
     (operate-in-stack token stack)))
 
 (defn evaluate-rpn
+  "Receive an list and calculate value using Reverse Polish Notation(RPN)"
   [coll]
   (loop [opers coll
          stack []]
@@ -42,6 +43,7 @@
         (recur rest-opers result)))))
 
 (defn filter-and-sum
+  "Receive an list and return the sum of all even values"
   [coll]
   (loop [values coll
          sum 0]
@@ -55,6 +57,7 @@
              (recur rest-list))))))
 
 (defn word-count
+  "Receive an frase and return one map that containing the number of repeated words"
   [phrase]
   (-> phrase
       (str/split #" ")
@@ -71,6 +74,7 @@
       (biggest maxx)))
 
 (defn find-max
+  "Receive an list of number and return the largest one"
   [coll]
   (loop [values coll
          maxx (first values)]
@@ -79,3 +83,18 @@
       (->> maxx
            (get-max values)
            (recur (next values))))))
+
+(defn- str-in?
+  [x coll]
+  (some #(= x %) coll))
+
+(defn compress-seq
+  ([values] (compress-seq values []))
+  ([values lst]
+   (if (empty? values)
+     lst
+     (let [current-value  (first values)
+           next-values (next values)]
+       (if (str-in? current-value lst)
+         (recur next-values lst)
+         (recur next-values (conj lst current-value)))))))
