@@ -70,3 +70,18 @@
         (if (> vl mx)
           (recur next-vs vl)
           (recur next-vs mx))))))
+
+(defn- str-in?
+  [x coll]
+  (some #(= x %) coll))
+
+(defn compress-seq
+  ([values] (compress-seq values []))
+  ([values lst]
+   (if (empty? values)
+     lst
+     (let [current-value  (first values)
+           next-values (next values)]
+       (if (str-in? current-value lst)
+         (recur next-values lst)
+         (recur next-values (conj lst current-value)))))))

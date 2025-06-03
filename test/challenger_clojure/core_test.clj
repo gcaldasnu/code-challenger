@@ -29,4 +29,10 @@
       [1 2 3 4 5] 5
       [-10 -5 -3 -20] -3)))
 
+(deftest compress-seq-test
+  (testing "Validate compress sequence result"
+    (are [values expect] (= (compress-seq values) expect)
+      [1 1 2 2 2 3 3 1 1 1] [1 2 3]
+      ["a" "a" "b" "c" "c" "c" "d"] ["a" "b" "c" "d"])))
+
 (run-tests)
