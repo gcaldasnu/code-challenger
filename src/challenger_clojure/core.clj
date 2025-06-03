@@ -5,9 +5,13 @@
 
 (def ^:private allowed-operations [+ - * /])
 
+(defn- in?
+  [x coll]
+  (some #(= x %) coll))
+
 (defn- valid-operation?
   [operation]
-  (some #(= operation %) allowed-operations))
+  (in? operation allowed-operations))
 
 (defn- execute-operation-in-stack
   [oper stack]
@@ -84,17 +88,18 @@
            (get-max values)
            (recur (next values))))))
 
-(defn- str-in?
-  [x coll]
-  (some #(= x %) coll))
+(defn- handle-value-in-seq
+  [coll x]
+  (if (in? x coll)
+    coll
+    (conj coll x)))
 
 (defn compress-seq
-  ([values] (compress-seq values []))
-  ([values lst]
-   (if (empty? values)
+  ([coll] (compress-seq coll []))
+  ([coll lst]
+   (if (empty? coll)
      lst
-     (let [current-value  (first values)
-           next-values (next values)]
-       (if (str-in? current-value lst)
-         (recur next-values lst)
-         (recur next-values (conj lst current-value)))))))
+     (->> coll
+          first
+          (handle-value-in-seq lst)
+          (recur (next coll))))))
