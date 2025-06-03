@@ -22,3 +22,11 @@
     (are [word expect] (= (word-count word) expect)
       "hello world hello" {"hello" 2 "world" 1}
       "Clojure is fun and Clojure is powerful" {"Clojure" 2, "is" 2, "fun" 1, "and" 1, "powerful" 1})))
+
+(deftest find-max-test
+  (testing "Validate if query returns the biggest"
+    (are [values expect] (= (find-max values) expect)
+      [1 2 3 4 5] 5
+      [-10 -5 -3 -20] -3)))
+
+(run-tests)

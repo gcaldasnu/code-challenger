@@ -58,3 +58,15 @@
   (-> frase
       (str/split #" ")
       frequencies))
+
+(defn find-max
+  [values]
+  (loop [vs values
+         mx (first vs)]
+    (if (empty? vs)
+      mx
+      (let [vl (first vs)
+            next-vs (next vs)]
+        (if (> vl mx)
+          (recur next-vs vl)
+          (recur next-vs mx))))))
